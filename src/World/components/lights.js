@@ -28,7 +28,7 @@ function createLights() {
     mainLight.shadow.bias = -0.0001;
     mainLight.shadow.mapSize.width = 512 * 4;
     mainLight.shadow.mapSize.height = 512 * 4;
-    mainLight.shadow.radius = 16;
+    mainLight.shadow.radius = 8;
 
     const backAreaLight = new RectAreaLight('white', 4, 4, 4);
     const backRectAreaLightHelper = new RectAreaLightHelper(backAreaLight);
