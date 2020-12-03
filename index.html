@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head href="./styles/main.css" rel="stylesheet" type="text/css">
+  <title>Happy Holidays from Clevyr</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+
+  <link rel="icon" href="https://discoverthreejs.com/favicon.ico" type="image/x-icon">
+
+  <link href="./styles/main.css" rel="stylesheet" type="text/css">
+
+  <script type="module" src="./src/main.js"></script>
+</head>
+
+<body>
+  <h1></h1>
+
+  <div id="scene-container">
+    <!-- Our <canvas> will be inserted here -->
+  </div>
+</body>
+
+<script type=x-shader/x-fragment id="shadow-fragment">
+#define PI 3.141592653589793
+
+uniform vec3 uColor;
+uniform float uAlpha;
+uniform float uFadeRadius;
+
+varying vec2 vUv;
+
+float sineInOut(float t)
+{
+    return - 0.5 * (cos(PI * t) - 1.0);
+}
+
+void main()
+{
+    float strength = 0.0;
+
+    if(vUv.x < uFadeRadius && vUv.y < uFadeRadius)
+    {
+        strength = clamp(1.0 - distance(vUv, vec2(uFadeRadius)) / uFadeRadius, 0.0, 1.0);
+    }
+
+    else if(vUv.x > 1.0 - uFadeRadius && vUv.y < uFadeRadius)
+    {
+        strength = clamp(1.0 - distance(vUv, vec2(1.0 - uFadeRadius, uFadeRadius)) / uFadeRadius, 0.0, 1.0);
+    }
+
+    else if(vUv.x > 1.0 - uFadeRadius && vUv.y > 1.0 - uFadeRadius)
+    {
+        strength = clamp(1.0 - distance(vUv, vec2(1.0 - uFadeRadius, 1.0 - uFadeRadius)) / uFadeRadius, 0.0, 1.0);
+    }
+
+    else if(vUv.x < uFadeRadius && vUv.y > 1.0 - uFadeRadius)
+    {
+        strength = clamp(1.0 - distance(vUv, vec2(uFadeRadius, 1.0 - uFadeRadius)) / uFadeRadius, 0.0, 1.0);
+    }
+
+    else
+    {
+        float xNeg = clamp(vUv.x / uFadeRadius, 0.0, 1.0);
+        float xPos = clamp((1.0 - vUv.x) / uFadeRadius, 0.0, 1.0);
+        float yNeg = clamp(vUv.y / uFadeRadius, 0.0, 1.0);
+        float yPos = clamp((1.0 - vUv.y) / uFadeRadius, 0.0, 1.0);
+
+        strength = xNeg * xPos * yNeg * yPos;
+    }
+
+    strength = sineInOut(strength);
+    strength *= uAlpha;
+
+    gl_FragColor = vec4(uColor, strength);
+}
+</script>
+
+<script type=x-shader/x-vertex id="shadow-vertex">
+  varying vec2 vUv;
+
+  void main()
+  {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+</script>
+
+<script type=x-shader/x-fragment id="floorShadow-fragment">
+  uniform sampler2D tShadow;
+  uniform vec3 uShadowColor;
+  uniform float uAlpha;
+  
+  varying vec2 vUv;
+  
+  void main()
+  {
+      float shadowAlpha = 1.0 - texture2D(tShadow, vUv).r;
+      shadowAlpha *= uAlpha;
+  
+      gl_FragColor = vec4(uShadowColor, shadowAlpha);
+  }
+</script>
+
+<script type="x-shader/x-vertex" id="floorShadow-vertex">
+  varying vec2 vUv;
+
+  void main()
+  {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+</script>
+
+<script type="x-shader/x-fragment" id="floor-fragment">
+  uniform sampler2D tBackground;
+
+  varying vec2 vUv;
+  
+  void main()
+  {
+      vec4 backgroundColor = texture2D(tBackground, vUv);
+  
+      gl_FragColor = backgroundColor;
+  }
+</script>
+
+<script type="x-shader/x-vertex" id="floor-vertex">
+  varying vec2 vUv;
+
+  void main()
+  {
+      vUv = uv;
+  
+      vec3 newPosition = position;
+      newPosition.z = 1.0;
+      gl_Position = vec4(newPosition, 1.0);
+  }
+</script>
+
+<script type="x-shader/x-vertex" id="vertexshader">
+
+  varying vec2 vUv;
+
+  void main() {
+
+    vUv = uv;
+
+    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+  }
+
+</script>
+
+<script type="x-shader/x-fragment" id="fragmentshader">
+
+  uniform sampler2D baseTexture;
+  uniform sampler2D bloomTexture;
+
+  varying vec2 vUv;
+
+  void main() {
+
+    gl_FragColor = ( texture2D( baseTexture, vUv ) + vec4( 1.0 ) * texture2D( bloomTexture, vUv ) );
+
+  }
+
+</script>
+
+</html>
