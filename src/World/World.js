@@ -59,7 +59,7 @@ class World {
 
         const { ambientLight, topPointLight, pointLight, mainLight, backAreaLight, areaLight } = createLights();
 
-        scene.add(ambientLight, backAreaLight, areaLight, mainLight);
+        scene.add(ambientLight, topPointLight, backAreaLight, areaLight, mainLight);
 
         const resizer = new Resizer(container, camera, renderer, composer);
     }
@@ -86,25 +86,47 @@ class World {
 
             if(node.name === "MESHUFO"){
                 node.castShadow = false; 
-                node.receiveShadow = true; 
             }
 
             if(node.name === "MESHCoffeeCup"){
                 node.castShadow = false; 
-                node.receiveShadow = true; 
-            }
-
-            if(node.name === "MESHTree"){
-                node.castShadow = false; 
-                node.receiveShadow = true; 
             }
 
             if(node.name === "MESHSky"){
                 node.castShadow = false;
             }
 
+            if(node.name === "MESHSnow-NormalMap001"){
+                node.castShadow = false;
+            }
+
             if(node.name.includes("Bulb")){
                 node.layers.enable(BLOOM_SCENE);
+            }
+
+            if(node.name === "LIGHTTop"){
+                node.castShadow = false; 
+                node.receiveShadow = false; 
+            }
+
+            if(node.name === "LIGHTFill"){
+                node.castShadow = false; 
+                node.receiveShadow = false; 
+            }
+
+            if(node.name === "LIGHTBack"){
+                node.castShadow = false; 
+                node.receiveShadow = false; 
+            }
+
+            if(node.name === "CAMCam2-WideViewRes001"){
+                node.castShadow = false; 
+                node.receiveShadow = false; 
+            }
+
+            if(node.name === "MESHType"){
+                node.castShadow = false; 
+                node.receiveShadow = false; 
             }
     
         } );
@@ -114,7 +136,7 @@ class World {
         // Coffee Cup
         shadows.add(holidayScene.children[8], { sizeX: 1, sizeZ: 1, offsetY: 0.25, alpha: 0.1 });
         // Tree
-        shadows.add(holidayScene.children[4].children[0], { sizeX: 2, sizeZ: 2, offsetY: 0.25, alpha: 1 });
+        shadows.add(holidayScene.children[4].children[0], { sizeX: 1.5, sizeZ: 1.5, offsetY: 0.25, alpha: 1 });
 
         const shadowObject = createObject();
         shadowObject.add(shadows.container);

@@ -8,14 +8,14 @@ import {
 import { RectAreaLightHelper } from 'https://unpkg.com/three@0.117.0/examples/jsm/helpers/RectAreaLightHelper.js';
 
 function createLights() {
-    const ambientLight = new AmbientLight('white', 8);
+    const ambientLight = new AmbientLight('white', 6);
 
     const topPointLight = new PointLight('white', 20);
-    // topPointLight.castShadow = true;
-    // topPointLight.shadow.bias = -0.0001;
-    // topPointLight.shadow.mapSize.width = 1024 * 2;
-    // topPointLight.shadow.mapSize.height = 1024 * 2;
-    // topPointLight.shadow.radius = 8;
+    topPointLight.castShadow = true;
+    topPointLight.shadow.bias = -0.0001;
+    topPointLight.shadow.mapSize.width = 512 * 2;
+    topPointLight.shadow.mapSize.height = 512 * 2;
+    topPointLight.shadow.radius = 16;
     const pointLight = new PointLight('white', 20);
     // pointLight.castShadow = true;
     // pointLight.shadow.bias = -0.0001;
@@ -30,7 +30,7 @@ function createLights() {
     mainLight.shadow.mapSize.height = 512 * 4;
     mainLight.shadow.radius = 16;
 
-    const backAreaLight = new RectAreaLight('white', 4, 2, 2);
+    const backAreaLight = new RectAreaLight('white', 4, 4, 4);
     const backRectAreaLightHelper = new RectAreaLightHelper(backAreaLight);
     backAreaLight.add(backRectAreaLightHelper);
 
