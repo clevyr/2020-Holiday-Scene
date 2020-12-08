@@ -24,7 +24,6 @@ import { Vector2, ShaderMaterial, Layers } from 'https://unpkg.com/three@0.117.0
 // These variables are module-scoped: we cannot access
 // them from outside the module
 let camera;
-let bloomCamera;
 let controls;
 let renderer;
 let composer;
@@ -48,7 +47,6 @@ const bloomParams = {
 class World {
     constructor(container) {
         camera = createCamera();
-        bloomCamera = camera.clone();
         scene = createScene();
         renderer = createRenderer();
         composer = createComposer(renderer);
@@ -85,11 +83,24 @@ class World {
             }
 
             if(node.name === "MESHUFO"){
+                // node.castShadow = false; 
+                // shadows.add(node, { sizeX: 1, sizeZ: 1, offsetY: 0.25, alpha: 1 });
+            }
+
+            if(node.name === "MESHBeam2"){
                 node.castShadow = false; 
+                node.receiveShadow = false;
             }
 
             if(node.name === "MESHCoffeeCup"){
                 node.castShadow = false; 
+                shadows.add(node, { sizeX: 1, sizeZ: 1, offsetY: 0.25, alpha: 0.1 });
+                mouseEvents.add(node);
+            }
+
+            if(node.name === "MESHTree"){
+                node.castShadow = false;
+                shadows.add(node.children[0], { sizeX: 1.5, sizeZ: 1.5, offsetY: 0.25, alpha: 1 });
             }
 
             if(node.name === "MESHSky"){
@@ -100,7 +111,11 @@ class World {
                 node.castShadow = false;
             }
 
-            if(node.name.includes("Bulb")){
+            if (node.name === "Cylinder.015_0") {
+                mouseEvents.add(node); // saber
+            }
+
+            if(node.name.includes("BloomMe")){
                 node.layers.enable(BLOOM_SCENE);
             }
 
@@ -128,25 +143,41 @@ class World {
                 node.castShadow = false; 
                 node.receiveShadow = false; 
             }
+
+            if (node.name === 'MESHType') {
+                node.visible = false;
+            }
+
+            if (node.name === "MESHPhone") {
+                mouseEvents.add(node);
+            }
+
+            if (node.name === "MESHBox") {
+                mouseEvents.add(node);
+            }
+
+            if (node.name === "MESHBox001") {
+                mouseEvents.add(node);
+            }
     
         } );
 
         // UFO
-        shadows.add(holidayScene.children[7], { sizeX: 1, sizeZ: 1, offsetY: 0.25, alpha: 1 });
+        // shadows.add(holidayScene.children[7], { sizeX: 1, sizeZ: 1, offsetY: 0.25, alpha: 1 });
         // Coffee Cup
-        shadows.add(holidayScene.children[8], { sizeX: 1, sizeZ: 1, offsetY: 0.25, alpha: 0.1 });
+        // shadows.add(holidayScene.children[8], { sizeX: 1, sizeZ: 1, offsetY: 0.25, alpha: 0.1 });
         // Tree
-        shadows.add(holidayScene.children[4].children[0], { sizeX: 1.5, sizeZ: 1.5, offsetY: 0.25, alpha: 1 });
+        // shadows.add(holidayScene.children[4].children[0], { sizeX: 1.5, sizeZ: 1.5, offsetY: 0.25, alpha: 1 });
 
         const shadowObject = createObject();
         shadowObject.add(shadows.container);
         console.log(shadowObject);
 
-        mouseEvents.add(holidayScene.children[8]);
-        mouseEvents.add(holidayScene.children[9]);
-        mouseEvents.add(holidayScene.children[11].children[0]);
-        mouseEvents.add(holidayScene.children[27]);
-        mouseEvents.add(holidayScene.children[28]);
+        // mouseEvents.add(holidayScene.children[8]);
+        // mouseEvents.add(holidayScene.children[9]);
+        // mouseEvents.add(holidayScene.children[11].children[0]);
+        // mouseEvents.add(holidayScene.children[27]);
+        // mouseEvents.add(holidayScene.children[28]);
 
         const mouseEventsObject = createObject();
         mouseEventsObject.add(mouseEvents.container);

@@ -11,11 +11,11 @@ function createLights() {
     const ambientLight = new AmbientLight('white', 6);
 
     const topPointLight = new PointLight('white', 20);
-    topPointLight.castShadow = true;
-    topPointLight.shadow.bias = -0.0001;
-    topPointLight.shadow.mapSize.width = 512 * 2;
-    topPointLight.shadow.mapSize.height = 512 * 2;
-    topPointLight.shadow.radius = 16;
+    // topPointLight.castShadow = true;
+    // topPointLight.shadow.bias = -0.0001;
+    // topPointLight.shadow.mapSize.width = 512 * 2;
+    // topPointLight.shadow.mapSize.height = 512 * 2;
+    // topPointLight.shadow.radius = 16;
     const pointLight = new PointLight('white', 20);
     // pointLight.castShadow = true;
     // pointLight.shadow.bias = -0.0001;
